@@ -1,0 +1,82 @@
+.Toastify__toast {
+    border-radius: 10px;
+    backdrop-filter: blur(10px);
+    background: rgba(4, 4, 4, 0.7);
+
+  }
+.Toastify__toast :hover .Toastify__close-button--default{
+    display : flex
+}
+   
+.Toastify__close-button--default {
+    width : 30px;
+    height : 30px;
+    background: #F8F8F8;
+    color : #242424; /* color text inside */
+    border-radius : 50%;
+    display : none;
+    align-items : center;
+    justify-content : center;
+    position : absolute;
+    top : 10px;
+    right : 10px;
+    transition-duration : 0.2s;
+    cursor : pointer;
+}
+
+.dashboard{
+    background-color: #ffff;
+}
+
+.react-calendar{
+    width : 90% !important;
+    padding : 10px;
+    border-radius : 20px;
+    border: none !important;
+    transition-duration: 0.3s;
+
+}
+.custom-calendar:hover{
+    box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.top_side_bar{
+    /* width : 95%;
+    margin-top: -5px;
+    overflow-y : hidden;
+    transition-duration: 0.3s; */
+    padding: 0 3px;
+    width: 95%;
+    overflow-y: hidden;
+    transition-duration: 0.3s;
+}
+
+.top_side_bar:hover{
+    overflow-y: scroll;
+}
+
+.text_rect_card{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    float: right;
+}
+
+/* .rbc-calendar{
+    width: 100%;
+    height: 500px;
+    background-color: #ffff;
+    padding: 20px;
+    border-radius: 20px;
+}
+.rbc-calendar:hover{
+    box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.1);
+} */
+
+.main-tab{
+    width: 100%;
+    background: #f8f8f8;
+    /* height: 630px; */
+    /* overflow-x: hidden; */
+    border-radius: 20px;
+}

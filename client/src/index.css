@@ -1,0 +1,68 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
+*{
+  margin : 0;
+  padding : 0;
+  box-sizing: border-box;
+}
+
+
+@import "../node_modules/@syncfusion/ej2-base/styles/material.css";
+@import "../node_modules/@syncfusion/ej2-buttons/styles/material.css";
+@import "../node_modules/@syncfusion/ej2-calendars/styles/material.css";
+@import "../node_modules/@syncfusion/ej2-dropdowns/styles/material.css";
+@import "../node_modules/@syncfusion/ej2-inputs/styles/material.css";
+@import "../node_modules/@syncfusion/ej2-lists/styles/material.css";
+@import "../node_modules/@syncfusion/ej2-navigations/styles/material.css";
+@import "../node_modules/@syncfusion/ej2-popups/styles/material.css";
+@import "../node_modules/@syncfusion/ej2-splitbuttons/styles/material.css";
+@import "../node_modules/@syncfusion/ej2-react-schedule/styles/material.css";
+
+
+@import 'react-big-calendar/lib/addons/dragAndDrop/styles'; 
+html{
+  height : 100%;
+}
+body {
+  height: 100%;
+  margin: 0;
+  width : 100%;
+  overflow-y: hidden;
+  scroll-behavior: smooth;
+  font-family: 'Montserrat', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+input:focus, textarea:focus, select:focus{
+  outline: none;
+}
+
+/* scrollbar custom */
+/* width */
+/* scrollbar custom */
+::-webkit-scrollbar {
+  
+  width: 3px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+ background: rgba(4, 4, 4, 0.0);
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  
+  background: #6b6b6b; 
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #242424; 
+}
+
+/* .dashboard{
+  width: 100%;
+  overflow-y: hidden;
+} */
