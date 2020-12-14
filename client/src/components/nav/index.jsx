@@ -1,3 +1,4 @@
+
 import {Row , Col} from 'reactstrap';
 import styled from 'styled-components';
 import {useRecoilState} from 'recoil'
@@ -9,32 +10,12 @@ import {TextBlack} from '../text/index'
 import {CustomInput} from '../login/index'
 
 //state
+import {adminState} from '../../states/adminState'
 import {clickSideBar} from '../../states/navbarState'
-
-const NavBarStyled = styled.nav`
-    display : flex;
-    align-items : center;
-    width : 100%;
-    padding : 10px 20px;
-    position : fixed ;
-    top : 0;
-    left : 0;
-    background : #ffff;
-    z-index : 3;
-`
-const NavBarMidItems = styled.div`
-    display : flex;
-    padding : 0px;
-    align-items : center;
-    justify-content : space-between;
-`
-const NavBarEndItems = styled(NavBarMidItems)`
-    justify-content : space-around;
-    padding : 0 10px;
-`
 
 export const NavBar= () =>{
     const [title] = useRecoilState(clickSideBar)
+    const [admin] = useRecoilState(adminState)
 
     return (
     <Row>
@@ -47,7 +28,7 @@ export const NavBar= () =>{
         <Col lg="8">
             <NavBarMidItems>
             <TextBlack fontSize="30px" fontWeight="500">
-                { title.sideBar != "Home" ? title.sideBar :"Welcome back ! /user/" }
+                { title.sideBar != "Home" || "" ? title.sideBar : `Welcome back ${admin.username}` }
             </TextBlack>
             <div className="input-custom">
                 <FiSearch style={{
@@ -71,10 +52,34 @@ export const NavBar= () =>{
         <Col lg="3">
             <NavBarEndItems>
             <IoNotificationsOutline style={{margin: "0 10px"}} size="30px"/>
-            <AvatarRectangleCard/>
+            <AvatarRectangleCard name={admin.username} position={admin.position}/>
             </NavBarEndItems>
         </Col>
     </NavBarStyled>
     </Row>
     )
 }
+
+
+
+const NavBarStyled = styled.nav`
+    display : flex;
+    align-items : center;
+    width : 100%;
+    padding : 10px 20px;
+    position : fixed ;
+    top : 0;
+    left : 0;
+    background : #ffff;
+    z-index : 3;
+`
+const NavBarMidItems = styled.div`
+    display : flex;
+    padding : 0px;
+    align-items : center;
+    justify-content : space-between;
+`
+const NavBarEndItems = styled(NavBarMidItems)`
+    justify-content : space-around;
+    padding : 0 10px;
+`

@@ -32,13 +32,11 @@ export default function SideBar() {
                 <div className="top_side_bar">
                     {
                         sideBarState.map((item, index)  =>
-                        <SideBarItem active={item.id == currentStateBar.sideBar ? true : false} >
-                            <Link 
-                                onClick={()=>handleClick(item.name)} 
-                                to ={item.href}
-                            >
-                                {item.icon}   {/* icons here */}
-                            </Link>
+                        <SideBarItem 
+                            active={item.name == currentStateBar.sideBar ? true : false}
+                            onClick={()=>handleClick(item.name)} 
+                            ><Link to ={item.href}>
+                                {item.icon}</Link>
                         </SideBarItem>
                         )
                         

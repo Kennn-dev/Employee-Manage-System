@@ -32,7 +32,7 @@ export const itemSideBar = atom({
             {
                 id : "2",
                 href : "/dashboard/salary",
-                name : "Salary",
+                name : "hi",
                 icon : salaryIcon
             },
             {

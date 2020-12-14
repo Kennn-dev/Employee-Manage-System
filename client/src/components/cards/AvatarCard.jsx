@@ -36,15 +36,17 @@ const RectangleCard = styled.div`
     }
 `
 
-export const AvatarRectangleCard = ({name, posititon}) => {
+export const AvatarRectangleCard = ({name, position}) => {
     return (
         <RectangleCard>
             <div className="text_rect_card">
                 <TextBlack 
                     fontSize="14px" 
                     fontWeight ="500"
-                >Vo Phu Hoang Nhat</TextBlack>
-                <TextBlack fontSize="12px" fontWeight ="300">Position</TextBlack>
+            >{name ? name : "Vo phu hoang nhat"}</TextBlack>
+                <TextBlack fontSize="12px" fontWeight ="300">
+                    {position ? position : "admin"}
+                </TextBlack>
             </div>
             <div className="avatar_rect_card">
                 <Avatar facebookId="100013123485420" size="50" round={true}/>

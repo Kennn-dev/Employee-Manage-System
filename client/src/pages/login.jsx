@@ -10,6 +10,7 @@ import { toast } from 'react-toastify';
 import { useJwt } from 'react-jwt'
 import { useCookies } from 'react-cookie'
 import { useRecoilState } from 'recoil'
+import ReactLoading from 'react-loading';
 import '../custom.css'
 
 //import components
@@ -34,17 +35,16 @@ import {
  } from "../components/text";
 
 //import states
-import {adminState , isAdmin} from '../states/adminState'
+import {adminState} from '../states/adminState'
 
 export default function Login() {
     //global states
     const [admin , setAdmin] = useRecoilState(adminState);
-    const [auth , setAuth] = useRecoilState(isAdmin)
     
     let history = useHistory()
     const [cookies, setCookie] = useCookies(['accessToken']);
     const { register, handleSubmit, errors } = useForm();
-    const { decodedToken } = useJwt(cookies.accessToken);
+    // const { decodedToken } = useJwt(cookies.accessToken);
     // console.log(login)
     
     const LOGIN_ADMIN = gql`
@@ -52,6 +52,7 @@ export default function Login() {
             loginAdmin(username: $username , password : $password) {
                 id
                 username
+                position
                 token
             }
         }
@@ -80,12 +81,14 @@ export default function Login() {
             toast('✅ Login successfully');
             //token = cookies.accessToken
             // console.log(decodedToken);
+            // console.log(data) = {loginAdmin}
+            let newAdmin = data.loginAdmin;
             setAdmin({
-                id : data.id,
-                username : data.username,
-                position : data.position
+                id : newAdmin.id,
+                username : newAdmin.username,
+                position : newAdmin.position
             })
-            setAuth({isAuth : true})
+            // console.log(admin)
             history.push("/dashboard")
         }catch(err){
             toast(`⛔ ${err.message}`);
@@ -99,7 +102,8 @@ export default function Login() {
             <Row lg="2">
                 <Col>
                 <ContainerMiddle>
-                    <TitleH1 >Login</TitleH1>
+                    <TitleH1 >Login </TitleH1>
+                    {loading ? <ReactLoading type={"bars"} color={"#242424"} height={50} width={50} /> : ""}
                     <TextBlack fontWeight ="300" fontSize = "14px" >Start manage your team</TextBlack>
                     <InputItems>
                         <TextBlack fontWeight ="500" fontSize = "16px">Username</TextBlack>

@@ -6,7 +6,7 @@ import {
   Redirect
 } from "react-router-dom";
 import { ToastContainer} from 'react-toastify';
-import { useRecoilValue } from 'recoil'
+import { useRecoilState } from 'recoil'
 import 'react-toastify/dist/ReactToastify.css';
 
 //pages
@@ -14,11 +14,11 @@ import Login from './pages/login'
 import Register from './pages/register'
 import Dashboard from './pages/dashboard'
 
-import {isAdmin} from './states/adminState'
+import {adminState} from './states/adminState'
 
 
 export default function App() {
-  const check = useRecoilValue(isAdmin)
+  const [check] = useRecoilState(adminState)
   return (
     <Router>
       <div>
@@ -31,38 +31,37 @@ export default function App() {
             autoClose = {3000}
             />
         <Switch>
-          <Route path="/register">
-            <Register />
-          </Route>
-          <Route path="/login">
-            <Login />
-          </Route>
-          {/* <Route 
-            exact
-            path="/dashboard"
-            render = {()=>{
-              return (
-                check.isAuth ? 
-                <Dashboard/> :
-                <Redirect to="/login" /> 
-              )
-            }
-            }
-          /> */}
-          <Route path='/dashboard'>
-            <Dashboard/>
-          </Route>
-          <Route
-            exact
-            path="/"
-            render={() => {
+          <Route  path="/register" component={Register}/>
+          <Route  path="/login" component={Login}/>
+          {/* <Route  path="/dashboard" component={Dashboard}/> */}
+          <Route 
+              exact
+              path="/"
+              render = {()=>{
                 return (
-                  check.isAuth ?
-                  <Redirect to="/dashboard" /> :
+                  // check.isAuth ? 
+                  check.id !== "" ?
+                  <Dashboard/> :
                   <Redirect to="/login" /> 
                 )
-            }}
+              }
+            }
           />
+          <Route 
+              path="/dashboard"
+              render = {()=>{
+                return (
+                  // check.isAuth ? 
+                  check.id !== "" ?
+                  <Dashboard/> :
+                  <Redirect to="/login" /> 
+                )
+              }
+            }
+          />
+          <Route path="*" >
+            <h1>404 - Page not found</h1>
+          </Route>
         </Switch>
       </div>
     </Router>
