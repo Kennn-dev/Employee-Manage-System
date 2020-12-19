@@ -6,11 +6,15 @@ import {atom} from 'recoil'
 //        isAuth : false
 //     }, // default value (aka initial value)
 //   });
-export const adminState = atom({
-    key: 'adminState', // unique ID (with respect to other atoms/selectors)
+export const loginState = atom({
+    keu : 'loginState',
+    default : false
+})
+export const userState = atom({
+    key: 'userState', // unique ID (with respect to other atoms/selectors)
     default: {
         id : "",
-        position : "Admin",
+        position : "",
         username : ""
     }, // default value (aka initial value)
   });

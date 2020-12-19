@@ -13,10 +13,10 @@ import authMiddleWare from "./middlewares/auth";
 //app
 const app = express();
 // app.use(cors());
-app.use(authMiddleWare);
+
 app.use(bodyParser.json());
 app.use(cookieParser());
-
+app.use(authMiddleWare);
 const corsOptions = {
   origin: "http://localhost:3000",
   credentials: true,
@@ -27,12 +27,18 @@ const server = new ApolloServer({
   resolvers,
   // cors: corsOptions,
   context: ({ res, req }) => {
+    // console.log(req.cookies);
     return {
       req,
       res,
     };
   },
 });
+// //get cookies from request
+// app.use((req, _, next) => {
+//   console.log(req.cookies);
+//   next();
+// });
 
 const PORT = 4000;
 

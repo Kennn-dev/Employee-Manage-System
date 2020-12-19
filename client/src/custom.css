@@ -80,3 +80,14 @@
     /* overflow-x: hidden; */
     border-radius: 20px;
 }
+
+.rodal {
+    background : rgb(4 4 4 / 13%) !important;
+    backdrop-filter: blur(20px) !important ;
+
+}
+
+.btn_list_between {
+    display : flex;
+    justify-content: space-between;
+}

@@ -1,13 +1,18 @@
 import React, {useState } from 'react'
 import styled from 'styled-components'
 
+import {useRecoilState} from 'recoil'
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
+
+
+import {itemsInfoSideBar} from '../../states/navbarState'
 import {SideBarStyled} from '../sidebar'
 import { TextBlackUnderline} from '../text/index'
-import { ReactComponent as DevIcon} from '../../public/design-team.svg';
+
 
 export  function InfoSideBar() {
+    const [components] = useRecoilState(itemsInfoSideBar)
     const [value, onChange] = useState(new Date());
 
     return (
@@ -20,11 +25,7 @@ export  function InfoSideBar() {
                         onChange={onChange}
                         value={value}
                     />
-                </ItemInfoBarStyled>
-                <ItemInfoBarStyled>
-                <TextBlackUnderline fontSize="16px">Developing</TextBlackUnderline>
-                    <DevIcon style ={{ width: "230px" , height : "250px"}}/>
-                </ItemInfoBarStyled>
+                </ItemInfoBarStyled>       
             </InfoBarStyled>
         </div>
     )
@@ -36,7 +37,7 @@ const InfoBarStyled = styled(SideBarStyled)`
 
     &:hover{
         overflow-y : scroll;
-        overflow-x : hidden
+        overflow-x : hidden;
     }
 
 `

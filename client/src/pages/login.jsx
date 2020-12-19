@@ -4,12 +4,10 @@ import {
     Link,
     useHistory
 } from 'react-router-dom'
-import { gql, useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import { useForm } from "react-hook-form";
 import { toast } from 'react-toastify';
-import { useJwt } from 'react-jwt'
-import { useCookies } from 'react-cookie'
-import { useRecoilState } from 'recoil'
+// import { useJwt } from 'react-jwt'
 import ReactLoading from 'react-loading';
 import '../custom.css'
 
@@ -33,69 +31,53 @@ import {
     TextBlackHover,
     TextError
  } from "../components/text";
+import Cookies from 'js-cookie'
+
+//gql
+import {LOGIN} from '../graphql/mutation/index'
 
 //import states
-import {adminState} from '../states/adminState'
+import {auth} from '../graphql/var/authVar'
+import {user} from '../graphql/var/userVar'
 
 export default function Login() {
     //global states
-    const [admin , setAdmin] = useRecoilState(adminState);
-    
+   
     let history = useHistory()
-    const [cookies, setCookie] = useCookies(['accessToken']);
     const { register, handleSubmit, errors } = useForm();
-    // const { decodedToken } = useJwt(cookies.accessToken);
-    // console.log(login)
-    
-    const LOGIN_ADMIN = gql`
-        mutation loginAdmin($username: String! , $password : String!) {
-            loginAdmin(username: $username , password : $password) {
-                id
-                username
-                position
-                token
-            }
-        }
-    `
-
-    const [loginAdmin , {loading}] = useMutation(LOGIN_ADMIN,{
+    const [loginUser , {loading}] = useMutation(LOGIN,{
         credentials: 'include',
       });
 
     const onSubmit = async dataSubmit => {
         try{
-            if(loading) toast('🔃 Loading ...');
-            
-            const {data} = await loginAdmin({
+            const {data} = await loginUser({
                 variables : 
                 {
                     username : dataSubmit.username,
                     password : dataSubmit.password
                 }
             })
-            //submit data
-            //data ? success
-            // console.log(data)
-           
-            if(data) 
-            toast('✅ Login successfully');
-            //token = cookies.accessToken
-            // console.log(decodedToken);
-            // console.log(data) = {loginAdmin}
-            let newAdmin = data.loginAdmin;
-            setAdmin({
-                id : newAdmin.id,
-                username : newAdmin.username,
-                position : newAdmin.position
-            })
-            // console.log(admin)
-            history.push("/dashboard")
+   
+            if(data) {
+                const dataUser = await data.loginUser;
+                // console.log(dataUser)
+                Cookies.set('accessToken',dataUser.token,{expires : 15})
+                user({
+                    id : dataUser.id,
+                    position : dataUser.position,
+                    username : dataUser.username
+                })
+                auth(true)
+                // console.log(admin)--------
+                history.push("/dashboard")
+                toast('✅ Login successfully');
+            }
         }catch(err){
             toast(`⛔ ${err.message}`);
         }
             
     };
-
     return (    
         <div>
             <FormLogin onSubmit={handleSubmit(onSubmit)} >
@@ -144,7 +126,6 @@ export default function Login() {
                 </Col>
             </Row>
             </FormLogin>
-            
         </div>
     )
 }

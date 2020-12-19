@@ -6,8 +6,6 @@ import { sign, verify } from "jsonwebtoken";
 import { error } from "consola";
 import { compare, hash } from "bcrypt";
 
-import { SECRETKEY } from "../../config/index";
-
 export default {
   Query: {
     getAllEmployees: async (_, args, { req }, info) => {
@@ -22,7 +20,7 @@ export default {
       return result;
     },
     getEmployeeById: async (_, { id }, { req }, info) => {
-      //check req has "Authorize"
+      //check req has "authorization"
       //req.admin
       //req.user
       if (!req.isAuth) throw new AuthenticationError(`U must be login`);
@@ -62,37 +60,6 @@ export default {
         };
       }
     },
-    loginAdmin: async (_, { username, password }, { res }, info) => {
-      //check username ,
-      const user = await Admin.findOne({ username });
-      if (!user) {
-        throw new ApolloError(" Username is not found ", 402);
-      }
-      //check password.
-      const hash = await compare(password, user.password);
-      if (hash != true) {
-        throw new ApolloError(" Password doesn't match ! ", 402);
-      }
-      // send token
-      const accessToken = sign(
-        {
-          id: user._id,
-          position: user.position,
-          username: user.username,
-        },
-        SECRETKEY,
-        { expiresIn: 60 * 60 * 24 }
-      );
-
-      ////
-      res.cookie("accessToken", accessToken, { expiresIn: 60 * 60 * 24 });
-      return {
-        id: user._id,
-        position: user.position,
-        username: user.username,
-        token: accessToken,
-      };
-    },
     createNewEmployee: async (_, { newEmployee }, { req }, info) => {
       //check req has "Authorize"
       //req.admin
@@ -102,6 +69,7 @@ export default {
           `U dont have permission to do this action`
         );
       //check the username has taken
+      console.log(newEmployee);
       let { username, email, password } = newEmployee;
       let employee = await Employee.findOne({ username });
       if (employee) {
@@ -125,7 +93,7 @@ export default {
       let editData = await Employee.findByIdAndUpdate(
         { _id: id },
         { ...editEmployeeByID },
-        { new: true }
+        // { new: true }
       );
       return editData;
     },

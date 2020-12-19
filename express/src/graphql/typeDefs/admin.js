@@ -8,23 +8,23 @@ export default gql`
 
   type Mutation {
     createAdmin(username: String!, password: String!): createNoti
-    editEmployeeByID(editEmployeeByID: newEmployeeInput!, id: ID!): Employee!
+    editEmployeeByID(editEmployeeByID: editEmployeeInput!, id: ID!): Employee!
     createNewEmployee(newEmployee: newEmployeeInput!): Employee!
     deleteEmployee(id: ID!): employeeNoti!
-    loginAdmin(username: String!, password: String!): loginResponse!
+  }
+  input editEmployeeInput {
+    username: String!
+    name: String!
+    phone: String
+    email: String!
+    position: String!
+    address: String
   }
 
   type createNoti {
     id: ID!
     username: String!
     position: String!
-  }
-
-  type loginResponse {
-    id: ID!
-    username: String!
-    position: String!
-    token: String!
   }
 
   type Admin {

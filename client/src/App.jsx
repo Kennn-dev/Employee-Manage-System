@@ -1,24 +1,26 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Redirect
+  Redirect,
 } from "react-router-dom";
 import { ToastContainer} from 'react-toastify';
 import { useRecoilState } from 'recoil'
 import 'react-toastify/dist/ReactToastify.css';
-
+import Cookies from 'js-cookie'
 //pages
 import Login from './pages/login'
 import Register from './pages/register'
 import Dashboard from './pages/dashboard'
 
-import {adminState} from './states/adminState'
+import { useReactiveVar } from '@apollo/client';
+import {auth} from './graphql/var/authVar'
 
+import {PrivateRoute} from './components/routes/PrivateRoute'
 
 export default function App() {
-  const [check] = useRecoilState(adminState)
+  const isAuth = useReactiveVar(auth)
   return (
     <Router>
       <div>
@@ -33,31 +35,15 @@ export default function App() {
         <Switch>
           <Route  path="/register" component={Register}/>
           <Route  path="/login" component={Login}/>
-          {/* <Route  path="/dashboard" component={Dashboard}/> */}
           <Route 
               exact
               path="/"
-              render = {()=>{
-                return (
-                  // check.isAuth ? 
-                  check.id !== "" ?
-                  <Dashboard/> :
-                  <Redirect to="/login" /> 
-                )
-              }
-            }
+              component={() => <Redirect to="/dashboard" />}
           />
-          <Route 
-              path="/dashboard"
-              render = {()=>{
-                return (
-                  // check.isAuth ? 
-                  check.id !== "" ?
-                  <Dashboard/> :
-                  <Redirect to="/login" /> 
-                )
-              }
-            }
+          <PrivateRoute
+            path="/dashboard"
+            isAuth = {isAuth}
+            component={Dashboard}
           />
           <Route path="*" >
             <h1>404 - Page not found</h1>

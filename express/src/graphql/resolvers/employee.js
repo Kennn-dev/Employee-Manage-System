@@ -1,13 +1,11 @@
-import Employee from "../../models/Employee";
-// import { ApolloError } from "apollo-server-express";
-import { sign, verify } from "jsonwebtoken";
-import { compare, hash } from "bcrypt";
-import { error } from "consola";
-import { totp } from "otplib";
-
-// import { getUser } from "../../functions/index";
-import { SECRETKEY } from "../../config/index";
 import { ApolloError, AuthenticationError } from "apollo-server-express";
+import { compare, hash } from "bcrypt";
+// import { ApolloError } from "apollo-server-express";
+// import { getUser } from "../../functions/index";
+import Admin from "../../models/Admin";
+import Employee from "../../models/Employee";
+
+import { getTokens } from "../../functions/index";
 
 export default {
   Query: {
@@ -26,11 +24,31 @@ export default {
     },
   },
   Mutation: {
-    loginEmployee: async (_, { username, password }, { res }, info) => {
+    loginUser: async (_, { username, password }, { res }, info) => {
       //check username ,
-      const user = await Employee.findOne({ username });
+      let user = await Employee.findOne({ username });
       if (!user) {
-        throw new AuthenticationError(" Username is not valid ", 402);
+        let admin = await Admin.findOne({ username });
+        if (!admin)
+          throw new AuthenticationError(" Username is not valid ", 402);
+        //check password.
+        const hash = await compare(password, admin.password);
+        if (hash != true) {
+          throw new AuthenticationError(" Password doesn't match ! ", 402);
+        }
+        // send token
+        const { accessToken } = getTokens({
+          id: admin._id,
+          username: admin.username,
+          position: admin.position,
+        });
+        res.cookie("accessToken", accessToken, { expire: 60 * 60 }); //1h
+        return {
+          id: admin._id,
+          position: admin.position,
+          username: admin.username,
+          token: accessToken,
+        };
       }
       //check password.
       const hash = await compare(password, user.password);
@@ -39,17 +57,14 @@ export default {
       }
 
       // send token
-      const accessToken = sign(
-        {
-          id: user._doc._id,
-          ...user._doc,
-        },
-        SECRETKEY,
-        { expiresIn: 60 * 60 * 24 }
-      );
-
+      const { accessToken } = getTokens({
+        id: user._doc._id,
+        username: user.username,
+        position: user.position,
+      });
       ////
-      res.cookie("accessToken", accessToken, { expiresIn: 60 * 60 * 24 });
+      console.log("isEmployee");
+      res.cookie("accessToken", accessToken, { expire: 60 * 60 }); //1h
       return {
         id: user._id,
         position: user.position,
@@ -92,6 +107,27 @@ export default {
         message: "Update succesfully",
         success: true,
       };
+    },
+    resetTokens: async (_, __, { req }) => {
+      if (!req.user) {
+        if (!req.admin) {
+          return false;
+        }
+        const admin = await Admin.findById(req.admin);
+        // console.log(admin);
+        if (!admin) return false;
+        admin.count += 1;
+        await admin.save();
+        res.clearCookie("accessToken");
+        return true;
+      }
+      const user = await Employee.findById(req.user);
+      if (!user) {
+      }
+      user.count += 1;
+      await user.save();
+      res.clearCookie("accessToken");
+      return true;
     },
   },
 };

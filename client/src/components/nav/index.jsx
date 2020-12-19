@@ -1,6 +1,7 @@
 
 import {Row , Col} from 'reactstrap';
 import styled from 'styled-components';
+import { useReactiveVar } from '@apollo/client';
 import {useRecoilState} from 'recoil'
 import {FiSearch} from 'react-icons/fi'
 import {IoNotificationsOutline} from 'react-icons/io5'
@@ -10,12 +11,14 @@ import {TextBlack} from '../text/index'
 import {CustomInput} from '../login/index'
 
 //state
-import {adminState} from '../../states/adminState'
+import {user} from '../../graphql/var/userVar'
 import {clickSideBar} from '../../states/navbarState'
 
 export const NavBar= () =>{
     const [title] = useRecoilState(clickSideBar)
-    const [admin] = useRecoilState(adminState)
+    const currentUser = useReactiveVar(user) 
+
+
 
     return (
     <Row>
@@ -28,7 +31,7 @@ export const NavBar= () =>{
         <Col lg="8">
             <NavBarMidItems>
             <TextBlack fontSize="30px" fontWeight="500">
-                { title.sideBar != "Home" || "" ? title.sideBar : `Welcome back ${admin.username}` }
+                { title.sideBar != "Home" || "" ? title.sideBar : `Welcome back ${user.username}` }
             </TextBlack>
             <div className="input-custom">
                 <FiSearch style={{
@@ -52,7 +55,7 @@ export const NavBar= () =>{
         <Col lg="3">
             <NavBarEndItems>
             <IoNotificationsOutline style={{margin: "0 10px"}} size="30px"/>
-            <AvatarRectangleCard name={admin.username} position={admin.position}/>
+            <AvatarRectangleCard name={currentUser.username} position={currentUser.position}/>
             </NavBarEndItems>
         </Col>
     </NavBarStyled>

@@ -1,54 +1,43 @@
 import Employee from "../models/Employee";
 import Admin from "../models/Admin";
+import { getTokens } from "../functions/index";
 import { SECRETKEY } from "../config/index";
 import { verify } from "jsonwebtoken";
 
 const authMiddleWare = async (req, res, next) => {
   // Extract Authorization Header
-  const authHeader = req.get("Authorization");
-  // console.log("authHeader", authHeader);
-  if (!authHeader) {
+
+  const token = req.headers.authorization;
+  if (!token) {
     req.isAuth = false;
     return next();
   }
-
-  // Extract the token and check for token
-  const token = authHeader.split(" ")[1];
-  // const token = authHeader;
-  if (!token || token === "") {
-    req.isAuth = false;
-    return next();
-  }
-
   try {
-    // Verify the extracted token
-    let decodedToken = verify(token, SECRETKEY);
-
-    // If decoded token is null then set authentication of the request false
-    if (!decodedToken) {
-      req.isAuth = false;
-      return next();
-    }
-
-    // If the user has valid token then Find the user by decoded token's id
-    let authUser = await Employee.findById(decodedToken.id);
-    if (!authUser) {
-      let authAdmin = await Admin.findById(decodedToken.id);
-      if (!authAdmin) {
+    const tokenValue = token.split(" ")[1]; //ok
+    // console.log(tokenValue);
+    const { id } = verify(tokenValue, SECRETKEY);
+    // console.log(id);
+    const user = await Employee.findById(id);
+    if (!user) {
+      const admin = await Admin.findById(id);
+      if (!admin) {
         req.isAuth = false;
         return next();
       }
-      req.admin = authAdmin;
+      console.log("admin");
       req.isAuth = true;
+      req.admin = admin.id;
       return next();
     }
 
+    req.user = user.id;
     req.isAuth = true;
-    req.user = authUser;
     return next();
-  } catch (err) {
+  } catch (error) {
     req.isAuth = false;
     return next();
   }
+
+  // no cookies
 };
 export default authMiddleWare;

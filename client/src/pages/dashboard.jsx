@@ -1,19 +1,16 @@
-import React from 'react'
+import React,{useEffect} from 'react'
 import { Row , Col } from 'reactstrap'
+import Cookies from 'js-cookie'
+import {useRecoilState} from 'recoil'
 import 'react-perfect-scrollbar/dist/css/styles.css';
 import '../custom.css'
 import {
     BrowserRouter as Router,
     Switch,
     Route,
-    useRouteMatch,
-    Link
   } from "react-router-dom";
 
-
-
-// import {adminState} from '../states/adminState'
-// import {clickSideBar} from '../states/navbarState'
+import {loginState} from '../states/adminState'
 
 //components
 // import {Home,  Kitchen, Bedroom } from './test'
@@ -28,6 +25,14 @@ import {MainStyled} from './dashboard/main'
 import {InfoSideBar} from '../components/nav/infoSideBar'
 
 export default function Dashboard() {
+    const [auth , setAuth] = useRecoilState(loginState)
+     useEffect(() => {
+    const token = Cookies.get('accessToken');
+    if(token){ 
+        setAuth(true)
+    }
+    
+    }, [])
     return (
         <Router>
         <div className="dashboard">

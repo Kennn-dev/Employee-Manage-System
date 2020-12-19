@@ -6,9 +6,17 @@ export default gql`
   }
 
   extend type Mutation {
-    loginEmployee(username: String!, password: String!): loginResponse!
+    loginUser(username: String!, password: String!): loginResponse!
     changePasswordEmp(changePassword: changePasswordInput!): notiRespone!
+    resetTokens: Boolean!
     # editEmployeeByID(editEmployeeByID: newEmployeeInput!, id: ID!): Employee!
+  }
+
+  type loginResponse {
+    id: ID!
+    username: String!
+    position: String!
+    token: String!
   }
 
   input changePasswordInput {
@@ -28,14 +36,7 @@ export default gql`
     success: Boolean!
   }
 
-  input editProfileEmpInput {
-    username: String!
-    name: String!
-    phone: String!
-    email: String!
-    address: String
-  }
-
+ 
   input newEmployeeInput {
     username: String!
     password: String!
@@ -52,7 +53,7 @@ export default gql`
     username: String!
     password: String!
     email: String!
-    phone: String!
+    phone: String
     position: String!
     address: String
     createdAt: String
