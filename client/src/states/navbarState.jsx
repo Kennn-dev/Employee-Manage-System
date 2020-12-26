@@ -36,13 +36,13 @@ export const itemSideBar = atom({
             {
                 id : "2",
                 href : "/dashboard/salary",
-                name : "hi",
+                name : "Salary",
                 icon : salaryIcon
             },
             {
                 id : "3",
-                href : "/dashboard/event",
-                name : "Event",
+                href : "/dashboard/shift",
+                name : "Shift",
                 icon : eventIcon
             },
             {
@@ -61,7 +61,7 @@ export const itemSideBar = atom({
             //     id : "6",
             //     href : "/dashboard/schedule",
             //     name : "Schedule",
-            // },
+            // }
         ], // default value (aka initial value)
         
     });

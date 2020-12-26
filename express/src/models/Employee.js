@@ -1,6 +1,6 @@
 import { model, Schema } from "mongoose";
 
-const employeeSchema = new Schema(
+export const employeeSchema = new Schema(
   {
     name: {
       type: String,
@@ -28,10 +28,6 @@ const employeeSchema = new Schema(
     password: {
       type: String,
       required: true,
-    },
-    count: {
-      type: Number,
-      default: 0,
     },
   },
   {

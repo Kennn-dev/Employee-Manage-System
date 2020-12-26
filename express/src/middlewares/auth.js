@@ -24,8 +24,8 @@ const authMiddleWare = async (req, res, next) => {
         req.isAuth = false;
         return next();
       }
-      console.log("admin");
       req.isAuth = true;
+      console.log("admin");
       req.admin = admin.id;
       return next();
     }

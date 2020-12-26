@@ -1,5 +1,6 @@
 import React,{useEffect} from 'react'
 import { Row , Col } from 'reactstrap'
+import { useReactiveVar } from '@apollo/client';
 import Cookies from 'js-cookie'
 import {useRecoilState} from 'recoil'
 import 'react-perfect-scrollbar/dist/css/styles.css';
@@ -9,24 +10,28 @@ import {
     Switch,
     Route,
   } from "react-router-dom";
-
+//state
+import {hideInfoBar} from '../graphql/var/uiVar'
 import {loginState} from '../states/adminState'
 
 //components
-// import {Home,  Kitchen, Bedroom } from './test'
 import Employee from './dashboard/Employee'
 import Request from './dashboard/Request'
 import Home from './dashboard/Home'
+import Shift from './dashboard/Shift'
 
 import {NavBar} from '../components/nav/index'
 import SideBar from '../components/nav/SideBar'
-// import {Main} from './dashboard/main'
+
 import {MainStyled} from './dashboard/main'
 import {InfoSideBar} from '../components/nav/infoSideBar'
 
+
 export default function Dashboard() {
+    const showInfoBar = useReactiveVar(hideInfoBar)
     const [auth , setAuth] = useRecoilState(loginState)
-     useEffect(() => {
+
+    useEffect(() => {
     const token = Cookies.get('accessToken');
     if(token){ 
         setAuth(true)
@@ -46,18 +51,19 @@ export default function Dashboard() {
                 <Col lg="1">
                     <SideBar />
                 </Col>
-                <Col lg="8" 
+                <Col lg={showInfoBar ? "11" : "8"}
                     className="main-tab"
                 >   
                 <MainStyled> 
                     <Switch>
                         <Route exact path='/dashboard' component = {Home}/>
                         <Route  path="/dashboard/employee" component={Employee}/>
+                        <Route  path="/dashboard/shift" component={Shift}/>
                         <Route  path="/dashboard/request" component={Request}/>
                     </Switch>
                 </MainStyled>
                 </Col>
-                <Col lg="3">
+                <Col lg={showInfoBar ? "0" : "3"}>
                     <InfoSideBar/>
                 </Col>
             </Row>
