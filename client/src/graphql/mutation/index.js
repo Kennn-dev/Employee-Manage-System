@@ -74,3 +74,75 @@ export const DELETE_EMPLOYEE_BY_ID = gql`
     }
   }
 `;
+
+//HOLIDAY
+export const ADD_HOLIDAY = gql`
+  mutation addHoliday($title: String!, $date: String!) {
+    addHoliday(newHoliday: { title: $title, date: $date }) {
+      id
+      title
+      date
+    }
+  }
+`;
+
+export const DELETE_HOLIDAY = gql`
+  mutation deleteHoliday($id: ID!) {
+    deleteHoliday(idHoliday: $id)
+  }
+`;
+
+//LEAVE
+export const SIGN_UP_LEAVE = gql`
+  mutation signUpLeave(
+    $type: String!
+    $dateStart: String!
+    $dateEnd: String!
+    $reason: String!
+  ) {
+    signUpLeave(
+      newLeave: {
+        type: $type
+        dateStart: $dateStart
+        dateEnd: $dateEnd
+        reason: $reason
+      }
+    ) {
+      id
+      type
+      employee {
+        id
+        name
+        remain
+      }
+      dateStart
+      dateEnd
+      reason
+      status
+    }
+  }
+`;
+
+export const DELETE_LEAVE = gql`
+  mutation deleteLeave($id: ID!) {
+    deleteHoliday(idLeave: $id)
+  }
+`;
+
+export const APPROVE_LEAVE = gql`
+  mutation approvedLeave($idLeave: ID!, $newStatus: String!) {
+    approvedLeave(idLeave: $idLeave, newStatus: $newStatus) {
+      id
+      type
+      employee {
+        id
+        name
+        remain
+      }
+      dateStart
+      dateEnd
+      reason
+      status
+    }
+  }
+`;

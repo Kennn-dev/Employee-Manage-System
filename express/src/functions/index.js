@@ -1,5 +1,6 @@
 import { verify } from "jsonwebtoken";
 import { sign } from "jsonwebtoken";
+import moment from "moment";
 import { SECRETKEY, REFRESHKEY } from "../config/index";
 
 export const getUser = ({ token }) => {
@@ -30,4 +31,9 @@ export const getTokens = ({ id, username, position }) => {
   );
 
   return { accessToken, refreshToken };
+};
+
+export const formatToDate = (string) => {
+  const rs = moment().format(string);
+  return rs;
 };

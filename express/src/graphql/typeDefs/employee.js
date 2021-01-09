@@ -36,7 +36,6 @@ export default gql`
     success: Boolean!
   }
 
- 
   input newEmployeeInput {
     username: String!
     password: String!
@@ -56,6 +55,7 @@ export default gql`
     phone: String
     position: String!
     address: String
+    remain: Int
     createdAt: String
     updateAt: String
   }

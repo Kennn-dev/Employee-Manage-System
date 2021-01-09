@@ -9,7 +9,7 @@ import 'react-calendar/dist/Calendar.css';
 import {itemsInfoSideBar} from '../../states/navbarState'
 import {SideBarStyled} from '../sidebar'
 import { TextBlackUnderline} from '../text/index'
-
+import Holiday from './Holiday'
 
 export  function InfoSideBar() {
     const [components] = useRecoilState(itemsInfoSideBar)
@@ -25,16 +25,21 @@ export  function InfoSideBar() {
                         onChange={onChange}
                         value={value}
                     />
-                </ItemInfoBarStyled>       
+                </ItemInfoBarStyled>  
+                <ItemInfoBarStyled >
+                    <Holiday/>
+                </ItemInfoBarStyled> 
             </InfoBarStyled>
         </div>
     )
 }
 
+
+
 const InfoBarStyled = styled(SideBarStyled)`
     width : 337px;
     overflow : hidden;
-
+    height : 670px;
     &:hover{
         overflow-y : scroll;
         overflow-x : hidden;
@@ -46,6 +51,7 @@ const ItemInfoBarStyled = styled.div`
     flex-direction : column;
     align-items : center;
     margin : 10px 0;
+    width : ${props => props.width ? props.width : "100%"};
 `
 //height : 595px
 //width : 225px 

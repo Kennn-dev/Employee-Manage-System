@@ -66,3 +66,8 @@ input:focus, textarea:focus, select:focus{
   width: 100%;
   overflow-y: hidden;
 } */
+
+.flex-items{
+  display : flex ;
+  justify-content: space-around;
+}

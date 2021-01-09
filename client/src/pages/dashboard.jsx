@@ -15,10 +15,10 @@ import {hideInfoBar} from '../graphql/var/uiVar'
 import {loginState} from '../states/adminState'
 
 //components
-import Employee from './dashboard/Employee'
+import Employee from './dashboard/Employee/Employee'
 import Request from './dashboard/Request'
 import Home from './dashboard/Home'
-import Shift from './dashboard/Shift'
+import Shift from './dashboard/Shift/Shift'
 
 import {NavBar} from '../components/nav/index'
 import SideBar from '../components/nav/SideBar'

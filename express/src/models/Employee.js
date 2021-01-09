@@ -29,6 +29,10 @@ export const employeeSchema = new Schema(
       type: String,
       required: true,
     },
+    remain: {
+      type: Number,
+      default: 10,
+    },
   },
   {
     timestamps: true,

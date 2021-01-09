@@ -47,21 +47,15 @@ export const itemSideBar = atom({
             },
             {
                 id : "4",
-                href : "/dashboard/request",
-                name : "Requests",
-                icon : requestIcon
-            },
-            {
-                id : "5",
                 href : "/dashboard/statistic",
                 name : "Statistics",
                 icon : statisticIcon
             },
-            // {
-            //     id : "6",
-            //     href : "/dashboard/schedule",
-            //     name : "Schedule",
-            // }
+            {
+                id : "6",
+                href : "/dashboard/schedule",
+                name : "Schedule",
+            }
         ], // default value (aka initial value)
         
     });
@@ -77,33 +71,23 @@ export const itemSideBarEmployee = atom({
                 },
                 {   
                     id : "1",
+                    href : "/dashboard/employee",
+                    name : "Employee",
+                    icon : employeeIcon,
+                },
+                {   
+                    id : "2",
                     href : "/dashboard/request",
                     name : "Request",
                     icon : requestIcon,
                 },
-                {
-                    id : "2",
-                    href : "/dashboard/salary",
-                    name : "hi",
-                    icon : salaryIcon
-                },
+               
                 {
                     id : "3",
                     href : "/dashboard/event",
                     name : "Event",
                     icon : eventIcon
-                },
-                {
-                    id : "4",
-                    href : "/dashboard/statistic",
-                    name : "Statistics",
-                    icon : statisticIcon
                 }
-                // {
-                //     id : "6",
-                //     href : "/dashboard/schedule",
-                //     name : "Schedule",
-                // },
             ], // default value (aka initial value)
             
         });

@@ -19,10 +19,12 @@ import {auth} from './graphql/var/authVar'
 
 import {PrivateRoute} from './components/routes/PrivateRoute'
 
+
 export default function App() {
   const isAuth = useReactiveVar(auth)
   return (
     <Router>
+      
       <div>
         <ToastContainer 
             position = "top-right"

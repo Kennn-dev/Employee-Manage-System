@@ -3,7 +3,7 @@ export const SideBarStyled = styled.div`
     display : flex;
     flex-direction : column;
     align-items : center;
-    height : 595px;
+    height : 670px;
     justify-content : space-between;
     background-color : #ffff;
     width  : 90px;
@@ -19,7 +19,7 @@ export const SideBarItem = styled.div`
     padding : 15px 30px;
     margin-top : 30px;
     align-items : center;
-    cursor : pointer;
+    /* cursor : pointer; */
     
     background-color : ${props => props.active ? "#242424" : "#ffff"};
     transition-duration : 0.2s;

@@ -4,16 +4,20 @@ import { getTokens } from "../functions/index";
 import { SECRETKEY } from "../config/index";
 import { verify } from "jsonwebtoken";
 
+import consolaGlobalInstance, { success } from "consola";
+
 const authMiddleWare = async (req, res, next) => {
   // Extract Authorization Header
 
   const token = req.headers.authorization;
+  // success(`Got new token 💰 ${token}`);
   if (!token) {
     req.isAuth = false;
     return next();
   }
   try {
     const tokenValue = token.split(" ")[1]; //ok
+
     // console.log(tokenValue);
     const { id } = verify(tokenValue, SECRETKEY);
     // console.log(id);
@@ -25,13 +29,14 @@ const authMiddleWare = async (req, res, next) => {
         return next();
       }
       req.isAuth = true;
-      console.log("admin");
+      success("admin");
       req.admin = admin.id;
       return next();
     }
 
     req.user = user.id;
     req.isAuth = true;
+    success("user");
     return next();
   } catch (error) {
     req.isAuth = false;

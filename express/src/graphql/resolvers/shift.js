@@ -3,6 +3,8 @@ import dateFormat from "dateformat";
 import Shift from "../../models/Shift";
 import Employee from "../../models/Employee";
 
+//remember export to root file
+
 export default {
   Query: {
     getAllShifts: async (_, args, { req }) => {
@@ -116,4 +118,3 @@ export default {
     //✅
   },
 };
-//remember export to root file

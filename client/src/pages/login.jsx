@@ -63,11 +63,7 @@ export default function Login() {
                 const dataUser = await data.loginUser;
                 // console.log(dataUser)
                 Cookies.set('accessToken',dataUser.token,{expires : 15})
-                user({
-                    id : dataUser.id,
-                    position : dataUser.position,
-                    username : dataUser.username
-                })
+                user(dataUser)
                 auth(true)
                 // console.log(admin)--------
                 history.push("/dashboard")

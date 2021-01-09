@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 
 export const MainStyled = styled.div`
-    height: 630px;
+    height: 700px;
     overflow-x: hidden;
     padding: 10px;
 

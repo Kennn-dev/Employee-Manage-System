@@ -12,11 +12,11 @@ export default {
       //check req has "Authorize"
       //req.admin
       if (!req.isAuth) throw new AuthenticationError(`U must be login`);
-      if (!req.admin)
-        throw new AuthenticationError(
-          `U dont have permission to do this action`
-        );
-      let result = await Employee.find();
+      // if (!req.admin)
+      //   throw new AuthenticationError(
+      //     `U dont have permission to do this action`
+      //   );
+      let result = await Employee.find().sort("createdAt");
       return result;
     },
     getEmployeeById: async (_, { id }, { req }, info) => {
@@ -92,7 +92,7 @@ export default {
       if (!req.isAuth) throw new AuthenticationError(`U must be login`);
       let editData = await Employee.findByIdAndUpdate(
         { _id: id },
-        { ...editEmployeeByID },
+        { ...editEmployeeByID }
         // { new: true }
       );
       return editData;

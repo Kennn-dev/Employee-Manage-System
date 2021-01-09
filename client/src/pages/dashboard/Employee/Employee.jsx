@@ -1,4 +1,10 @@
 import React, {useEffect, useState} from 'react'
+import {
+    BrowserRouter as Router,
+    Switch,
+    Route,
+    Link,
+  } from "react-router-dom";
 import Rodal from 'rodal';
 import 'rodal/lib/rodal.css';
 import Select from 'react-select'
@@ -13,36 +19,37 @@ import {
     TitleH1,
     InputItems,
     CustomInput
-} from '../../components/login/index'
+} from '../../../components/login/index'
 import { 
     TextBlack,
     TextLight,
     TextError
- } from "../../components/text";
+ } from "../../../components/text";
  import { 
     PrimaryButton
- } from "../../components/buttons/index";
-import { Table } from 'reactstrap';
+ } from "../../../components/buttons/index";
 import ReactLoading from 'react-loading';
 import { toast } from 'react-toastify';
-import {IconContext } from 'react-icons'
-import {AiOutlineReload} from 'react-icons/ai'
-import {BsPlus} from 'react-icons/bs'
-import {FiEdit} from 'react-icons/fi'
-import {IoRemoveCircleOutline} from 'react-icons/io5'
-import {CommonCard} from '../../components/cards/CommonCard'
-import {CommonButtonBlack} from '../../components/buttons/index'
 
+import {CommonCard} from '../../../components/cards/CommonCard'
 //gql
 import {
     GET_ALL_EMPLOYEES,
     GET_EMPLOYEE_BY_ID,
-} from '../../graphql/query/index'
+    GET_ALL_LEAVES,
+} from '../../../graphql/query/index'
 import {
     CREATE_NEW_EMPLOYEE,
     DELETE_EMPLOYEE_BY_ID,
     EDIT_EMPLOYEE_BY_ID,
-} from '../../graphql/mutation/index'
+    SIGN_UP_LEAVE,
+    DELETE_LEAVE,
+    APPROVE_LEAVE
+} from '../../../graphql/mutation/index'
+
+//components
+import List from './List'
+import Leave from './Leave'
 
 export default function Employee() {
     const [onAdd , setOnAdd] = useState(false)
@@ -61,8 +68,13 @@ export default function Employee() {
     const { register, handleSubmit, errors , control} = useForm();
     const { register : registerEdit, handleSubmit : handleSubmitEdit, errors : errorsEdit , control : controlEdit} = useForm();
 
-
-    const { loading, error, data ,refetch } = useQuery(GET_ALL_EMPLOYEES);
+    //QUERY
+    const { loading, error, data ,refetch } = useQuery(GET_ALL_EMPLOYEES , {
+        onError : (err) => { toast(`⛔ ${err}`)}
+    });
+    const { loading : loadingLeaves, data : dataLeaves } = useQuery(GET_ALL_LEAVES ,{ 
+        onError : (err) => { toast(`⛔ ${err}`)} });
+    // const [loadLeaves, { loading : loadingLeaves, data : dataLeaves }] = useLazyQuery(GET_ALL_LEAVES);
     const [getEmployeeById,{ loading : queryEditEmployeeId, data : dataEmployeeId }] = useLazyQuery(GET_EMPLOYEE_BY_ID,{
         onCompleted: dataEmployeeId => {
             setCurrentEmp({...dataEmployeeId.getEmployeeById, 
@@ -73,7 +85,7 @@ export default function Employee() {
         }
     });
 
-
+    //MUTATE
     const [createNewEmployee,{ loading: mutationLoading, error: mutationError }] = useMutation(CREATE_NEW_EMPLOYEE,{
         credentials: 'include',
         refetchQueries :[
@@ -82,6 +94,7 @@ export default function Employee() {
       });
     const [deleteEmployee, {  error : mutationDeleteError }] = useMutation(DELETE_EMPLOYEE_BY_ID,{
         credentials: 'include',
+        onCompleted : () => { toast(`✅ Success`)},
         refetchQueries :[
             {query :GET_ALL_EMPLOYEES }
         ]
@@ -92,6 +105,27 @@ export default function Employee() {
             {query : GET_ALL_EMPLOYEES }
         ]
     });
+    const [signUpLeave,{ loading: loadingSignUpLeave }] = useMutation(SIGN_UP_LEAVE,{
+        credentials: 'include',
+            refetchQueries :[
+                {query : GET_ALL_LEAVES }
+            ],
+            onCompleted : () => { toast(`✅ Success`)}
+        });
+    const [approvedLeave,{ loading: loadingApprovedLeave }] = useMutation(APPROVE_LEAVE,{
+        credentials: 'include',
+            refetchQueries :[
+                {query : GET_ALL_LEAVES }
+            ],
+            onCompleted : () => { toast(`✅ Success`)}
+        });
+    const [deleteLeave,{ loading: loadingDeleteLeave}] = useMutation(DELETE_LEAVE,{
+        credentials: 'include',
+            refetchQueries :[
+                {query : GET_ALL_LEAVES }
+            ],
+            onCompleted : () => { toast(`✅ Success`)}
+        });
 
     const opionsPos = [
         {value : 'Bartender', label : 'Bartender'},
@@ -154,20 +188,11 @@ export default function Employee() {
     }
 
     const handleDelete = async (idEmployee) => {
-        try {
-            const {data} = await deleteEmployee({
+        deleteEmployee({
                 variables : {
                     id : idEmployee
                 }
             })
-            if(data.deleteEmployee.success === true){
-                //success
-                refetch();
-                toast('✅ Successfully deleted')
-            }
-        } catch (error) {
-            toast(`⛔ ${error}`)
-        }
     }
 
     const handleEdit = async (idEmployee) => {
@@ -179,72 +204,65 @@ export default function Employee() {
         console.log(currentEmp)
         setOnEdit(true);
     }
+    
+
+    if(loading) return <ReactLoading type={"bars"} color={"#242424"} height={50} width={50} />
 
     return (
+        <Router>
         <div style={{overflowX : "scroll" , padding : "10px"}}>
             <CommonCard width={"100%"}>
-            {loading ? <ReactLoading type={"bars"} color={"#242424"} height={50} width={50} /> : 
-                <>
-                <div className="btn_list_between">
-                    <CommonButtonBlack
-                        width="100px"
-                        height ="40px"
-                        onClick={() => setOnAdd(!onAdd)}
-                    >
-                        <BsPlus size="24" color="#f8f8f8"/>
-                        Add
-                    </CommonButtonBlack>
-                    <CommonButtonBlack
-                        width="40px"
-                        height ="40px"
-                        borderRadius="50%"
-                        onClick={() => refetch()}
-                    >
-                        <AiOutlineReload size="24" color="#f8f8f8"/>
-                    </CommonButtonBlack>
-                </div>
-                <Table hover responsive>
-                    <thead>
-                        <tr>
-                        <th>#</th>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Position</th>
-                        <th>Actions</th>
-                        </tr>
-                    </thead>
+                <div className="flex-items">
+                    <TotalCard>
+                        <ItemsInCard>
+                            <Link to="/dashboard/employee">
+                                <TextBlack>Employees</TextBlack>
+                                {data ? <TextBlack style={{display : "block"}} fontSize="30px" fontWeight="500">{data.getAllEmployees.length}</TextBlack> : "Fetching"}
+                            </Link>
+                        </ItemsInCard>
+                    </TotalCard>
                     {
-                        data.getAllEmployees.map((i ,index) => 
-                        <tbody>
-                            <tr>
-                            <th scope="row">{index+1}</th>
-                            <td>{i.name}</td>
-                            <td>{i.email}</td>
-                            <td>{i.position}</td>
-                            <td>
-                                <IconContext.Provider value={  { style : { 
-                                    padding : '5px',
-                                    borderRadius : '50%',
-                                    background : "#f8f8f8",
-                                    marginLeft : '5px',
-                                    cursor : 'pointer',
-                                    fontSize : '30px',
-                                }}}>
-                                    <FiEdit onClick={() => handleEdit(i.id)}/>
-                                    <IoRemoveCircleOutline 
-                                        style={{color : "#ffff", backgroundColor : "#ff657c"}} 
-                                        onClick={() => handleDelete(i.id)} 
-                                    />
-                                </IconContext.Provider>
-                            </td>
-                            </tr>
-                        </tbody>
-                        )
+                        loadingLeaves ? <ReactLoading type={"spin"} color={"#242424"} height={30} width={30} /> :
+                        <TotalCard> 
+                            <Link to ="/dashboard/employee/leave">
+                            <ItemsInCard>
+                                <TextBlack>Leaves Today</TextBlack>
+                                <TextBlack style={{display : "block"}} fontSize="30px" fontWeight="500">{dataLeaves.getAllLeaves.length}</TextBlack>
+                            </ItemsInCard>
+                            </Link>
+                        </TotalCard>
                     }
-                </Table>
-                </>
-            }
-            
+                    
+                </div>
+                <Switch>
+                    {
+                        loading ? "" : 
+                        <Route exact={true} path = "/dashboard/employee" component={() => 
+                        <List 
+                            refetch={refetch} 
+                            onAdd={onAdd} 
+                            setOnAdd={setOnAdd} 
+                            loading ={loading} 
+                            handleDelete={handleDelete} 
+                            handleEdit={handleEdit} 
+                            data={data.getAllEmployees} 
+                            />
+                        }/>
+                    }
+                    {
+                        loadingLeaves ? "" :
+                        <Route  path = "/dashboard/employee/leave" component={() =>
+                            <Leave 
+                                data = {dataLeaves.getAllLeaves}
+                                signUpLeave = {signUpLeave}
+                                loadingSignUpLeave = {loadingSignUpLeave}
+                                approvedLeave = {approvedLeave}
+                                deleteLeave = {deleteLeave}
+                            />
+                        }/>
+                    }
+                    
+                </Switch>
             </CommonCard>
             <Rodal visible={onAdd} onClose={() => setOnAdd(false)} showCloseButton={true}>
                 <FormMaxWidthHeight onSubmit={handleSubmit(onSubmit)} >
@@ -348,13 +366,29 @@ export default function Employee() {
                 </FormMaxWidthHeight>
             </Rodal>
         </div>
+        </Router>
     )
 }
 
 
 
-const FormMaxWidthHeight = styled(FormLogin)`
+export const FormMaxWidthHeight = styled(FormLogin)`
     width : 100%;
     height : 100%;
     overflow-x : scroll;
+`
+const TotalCard = styled.div`
+   
+    padding : 10px 50px;
+    border-radius : 20px;
+    border : 1px solid rgba(95, 94, 94, 0.28) ;
+    text-align : center;
+    &:hover {
+        box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.1);
+    }
+`
+const ItemsInCard = styled.div`
+    cursor : pointer;
+    padding : 10px;
+    
 `

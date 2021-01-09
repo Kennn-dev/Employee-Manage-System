@@ -25,3 +25,30 @@ export const GET_EMPLOYEE_BY_ID = gql`
     }
   }
 `;
+
+export const GET_ALL_LEAVES = gql`
+  query {
+    getAllLeaves {
+      id
+      type
+      employee {
+        id
+        name
+      }
+      dateStart
+      dateEnd
+      reason
+      status
+    }
+  }
+`;
+
+export const GET_ALL_HOLIDAYS = gql`
+  query {
+    getAllHolidays {
+      id
+      title
+      date
+    }
+  }
+`;

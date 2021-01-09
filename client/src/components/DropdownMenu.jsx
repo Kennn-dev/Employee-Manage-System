@@ -28,14 +28,15 @@ export default function DropdownMenu({items , isShow}) {
     )
 }
 
-const Menu = styled.div`
+export const Menu = styled.div`
     display : ${props => props.show ? "block" : "none"};  
     border-radius : 10px;
     border : 1px solid rgba(95, 94, 94, 0.28) ;
     padding : 10px 20px;
     position : absolute; 
+    margin-top : -3px;
     background: rgba(248, 248, 248, 0.7);
-    right : -10px;
+    right : ${props => props.right ? props.right : "-10px"};
     backdrop-filter: blur(20px);
     z-index : 99;
     transition-duration : 0.3s;
@@ -43,7 +44,7 @@ const Menu = styled.div`
         box-shadow: 0px 10px 54px rgba(0, 0, 0, 0.05);
     }
 `
-const MenuItem = styled.div`
+export const MenuItem = styled.div`
     cursor : pointer;
     width : 100%;
     font-size : 16px;
