@@ -21,14 +21,15 @@ export default function List({onAdd , refetch,setOnAdd , data , loading , handle
         <div>
                 <h3>List </h3>
                 <div className="btn_list_between">
+                    {currentUser.position === 'Admin' ?
                     <CommonButtonBlack
-                        width="100px"
-                        height ="40px"
-                        onClick={() => setOnAdd(!onAdd)}
-                    >
-                        <BsPlus size="24" color="#f8f8f8"/>
-                        Add
-                    </CommonButtonBlack>
+                    width="100px"
+                    height ="40px"
+                    onClick={() => setOnAdd(!onAdd)}
+                >
+                    <BsPlus size="24" color="#f8f8f8"/>
+                    Add
+                    </CommonButtonBlack> :""}
                     <CommonButtonBlack
                         width="40px"
                         height ="40px"

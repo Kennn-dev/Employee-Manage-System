@@ -19,6 +19,7 @@ import Employee from './dashboard/Employee/Employee'
 import Request from './dashboard/Request'
 import Home from './dashboard/Home'
 import Shift from './dashboard/Shift/Shift'
+import Salary from './dashboard/Salary/Salary'
 
 import {NavBar} from '../components/nav/index'
 import SideBar from '../components/nav/SideBar'
@@ -59,6 +60,7 @@ export default function Dashboard() {
                         <Route exact path='/dashboard' component = {Home}/>
                         <Route  path="/dashboard/employee" component={Employee}/>
                         <Route  path="/dashboard/shift" component={Shift}/>
+                        <Route path="/dashboard/salary" component={Salary}/>
                         <Route  path="/dashboard/request" component={Request}/>
                     </Switch>
                 </MainStyled>
