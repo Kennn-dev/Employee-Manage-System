@@ -1,4 +1,6 @@
 import { model, Schema } from "mongoose";
+import { salarySchema } from "./Salary";
+import { workDaySchema } from "./Workday";
 
 export const employeeSchema = new Schema(
   {
@@ -33,6 +35,8 @@ export const employeeSchema = new Schema(
       type: Number,
       default: 10,
     },
+    workDays: [workDaySchema],
+    salary: salarySchema,
   },
   {
     timestamps: true,

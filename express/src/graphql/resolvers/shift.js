@@ -1,5 +1,6 @@
 import { ApolloError, AuthenticationError } from "apollo-server-express";
 import dateFormat from "dateformat";
+import moment from "moment";
 import Shift from "../../models/Shift";
 import Employee from "../../models/Employee";
 
@@ -55,8 +56,8 @@ export default {
       cloneShift = {
         ...cloneShift,
         employees: [],
-        timeStart: dateFormat(cloneShift.timeStart, "isoTime"),
-        timeEnd: dateFormat(cloneShift.timeEnd, "isoTime"),
+        timeStart: cloneShift.timeStart,
+        timeEnd: cloneShift.timeEnd,
       };
 
       // console.log(cloneShift.timeStart);

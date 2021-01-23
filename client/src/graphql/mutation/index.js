@@ -146,3 +146,34 @@ export const APPROVE_LEAVE = gql`
     }
   }
 `;
+
+export const ADD_SHIFT = gql`
+  mutation addShift($name: String!, $timeStart: String!, $timeEnd: String!) {
+    addShift(
+      newShift: { name: $name, timeStart: $timeStart, timeEnd: $timeEnd }
+    ) {
+      id
+      name
+      timeStart
+      timeEnd
+    }
+  }
+`;
+
+export const ADD_WORK_DAY = gql`
+  mutation addWorkDay(
+    $idEmployee: ID!
+    $date: String!
+    $timeStart: String!
+    $timeEnd: String!
+  ) {
+    addWorkDay(
+      idEmployee: $idEmployee
+      workDay: { date: $date, timeStart: $timeStart, timeEnd: $timeEnd }
+    ) {
+      id
+      name
+      position
+    }
+  }
+`;

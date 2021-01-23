@@ -1,11 +1,16 @@
 import { ApolloError, AuthenticationError } from "apollo-server-express";
 import { compare, hash } from "bcrypt";
+import moment from "moment";
+import differenceInMinutes from "date-fns/differenceInMinutes";
 // import { ApolloError } from "apollo-server-express";
 // import { getUser } from "../../functions/index";
 import Admin from "../../models/Admin";
 import Employee from "../../models/Employee";
 
 import { getTokens } from "../../functions/index";
+import Salary from "../../models/Salary";
+import WorkDay from "../../models/Workday";
+import { parseISO } from "date-fns";
 
 export default {
   Query: {
@@ -20,6 +25,18 @@ export default {
         };
       } else {
         throw new ApolloError("Cant find employee");
+      }
+    },
+    getEmployeeByDate: async (_, { date }, { req }) => {
+      //check req has "Authorize"
+      //req.user
+      if (!req.isAuth) throw new AuthenticationError(`U must be login`);
+      try {
+        // const dateConv = Date.parse(date).toString();
+        let employees = await Employee.find({ "workDays.date": date });
+        return employees;
+      } catch (error) {
+        throw new ApolloError(error);
       }
     },
   },
@@ -128,6 +145,38 @@ export default {
       await user.save();
       res.clearCookie("accessToken");
       return true;
+    },
+    addWorkDay: async (_, { idEmployee, workDay }, { req }) => {
+      if (!req.isAuth) throw new AuthenticationError(`U must be login`);
+
+      try {
+        let newWorkDay = new WorkDay();
+
+        // const total = differenceInMinutes(
+        //   parseISO(workDay.timeEnd, 0),
+        //   parseISO(workDay.timeStart, 0)
+        // );
+        // calculate total duration
+        // let duration = moment.duration(workDay.timeEnd.diff(workDay.timeStart));
+
+        newWorkDay = {
+          date: workDay.date,
+          timeStart: workDay.timeStart,
+          timeEnd: workDay.timeEnd,
+          totalTime: "",
+        };
+        console.log(newWorkDay);
+
+        let employee = await Employee.findByIdAndUpdate(idEmployee, {
+          $addToSet: {
+            workDays: [newWorkDay],
+          },
+        });
+        // console.log(employee);
+        return employee;
+      } catch (error) {
+        throw new ApolloError(error);
+      }
     },
   },
 };

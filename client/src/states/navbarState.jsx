@@ -75,17 +75,11 @@ export const itemSideBarEmployee = atom({
                     name : "Employee",
                     icon : employeeIcon,
                 },
-                {   
-                    id : "2",
-                    href : "/dashboard/request",
-                    name : "Request",
-                    icon : requestIcon,
-                },
                
                 {
                     id : "3",
-                    href : "/dashboard/event",
-                    name : "Event",
+                    href : "/dashboard/shift",
+                    name : "Shift",
                     icon : eventIcon
                 }
             ], // default value (aka initial value)

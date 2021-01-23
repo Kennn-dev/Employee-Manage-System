@@ -45,10 +45,10 @@ import { useReactiveVar } from '@apollo/client';
 
 export default function Holiday() {
     const currentUser = useReactiveVar(user)
+    const currentDate = new Date();
     const [add, setAdd] = useState(false) //rodal add
     const [show, setShow] = useState(false) //dropdown
     const { register ,handleSubmit, errors ,control } = useForm();
-    const [time, setTime] = useState(new Date)
     //queries
     const { loading : loadingGetAllHolidays, error : errorGetAllHolidays, data : dataGetAllHolidays , refetch } = useQuery(GET_ALL_HOLIDAYS);
 
@@ -160,7 +160,7 @@ export default function Holiday() {
                     :
                     <>
                     <CustomUnderLineText fontSize="16px">
-                    <span>Holidays</span>
+                    <span>Upcoming holidays</span>
                     <AiOutlineMore onClick={() => setShow(!show)} size="20px"/>
                     </CustomUnderLineText>
                     <Menu show={show}
@@ -181,9 +181,8 @@ export default function Holiday() {
             {loadingGetAllHolidays || loadingDeleteHoliday ? <ReactLoading type={"spin"} color={"#242424"} height={50} width={50} />  :
             <ListStyled>
                 {
-                    dataGetAllHolidays.getAllHolidays.filter(i => isBefore(moment(i.date).toDate(),new Date()) === false).map(iFilter => 
+                    dataGetAllHolidays.getAllHolidays.filter(i => moment(parseInt(i.date)).toDate() > currentDate).map(iFilter => 
                         <ItemListStyled >
-                            {/* fix this to date with React-moment */}
                             <div style={{display : "flex", justifyContent:"space-between"}}
                             >
                                 {/* formatDistance(parseInt(i.dateStart),parseInt(i.dateEnd)) */}
@@ -206,17 +205,17 @@ export default function Holiday() {
 }
 
 
-const ListStyled = styled.ul`
+export const ListStyled = styled.ul`
     list-style : none;
     width : 100%;
 `
 
-const ItemListStyled = styled.li`
+export const ItemListStyled = styled.li`
     padding : 10px 15px;
     border: 1px solid rgba(95, 94, 94, 0.2);
     border-radius : 20px;
     margin-top : 15px;
-
+    cursor: pointer;
     &:hover {
         box-shadow: 0px 10px 54px rgba(0, 0, 0, 0.1);
     }

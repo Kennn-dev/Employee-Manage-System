@@ -3,12 +3,15 @@ import { gql } from "apollo-server-express";
 export default gql`
   extend type Query {
     getProfileEmpById(id: ID!): Employee!
+    getEmployeeByDate(date: String!): [Employee]!
   }
 
   extend type Mutation {
     loginUser(username: String!, password: String!): loginResponse!
     changePasswordEmp(changePassword: changePasswordInput!): notiRespone!
     resetTokens: Boolean!
+    updateSalary(idEmployee: ID!, idSalary: ID!): Boolean!
+    addWorkDay(idEmployee: ID!, workDay: workDayInput!): Employee!
     # editEmployeeByID(editEmployeeByID: newEmployeeInput!, id: ID!): Employee!
   }
 
@@ -17,6 +20,12 @@ export default gql`
     username: String!
     position: String!
     token: String!
+  }
+
+  input workDayInput {
+    date: String!
+    timeStart: String!
+    timeEnd: String!
   }
 
   input changePasswordInput {
@@ -45,7 +54,13 @@ export default gql`
     position: String!
     address: String
   }
-
+  type WorkDay {
+    id: ID!
+    date: String!
+    timeStart: String!
+    timeEnd: String!
+    totalTime: String!
+  }
   type Employee {
     id: ID!
     name: String!
@@ -56,6 +71,8 @@ export default gql`
     position: String!
     address: String
     remain: Int
+    workDays: [WorkDay]!
+    salary: Salary
     createdAt: String
     updateAt: String
   }
